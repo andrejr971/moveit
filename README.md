@@ -17,7 +17,7 @@
 <p align="center">
   <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-clonando%projeto">Clonando Projeto</a>&nbsp;&nbsp;&nbsp;
+  <a href="#-clonando-projeto">Clonando Projeto</a>&nbsp;&nbsp;&nbsp;
 </p>
 
 <br>
@@ -41,8 +41,9 @@
 Projeto criado durante a NextLevelWeek#4 da [Rockeseat](https://rockeseat.com.br)
 
 ## Clonando Projeto
+
 ```bash
-git clone
+git clone https://github.com/andrejr971/moveit.git
 
 npm install
 # or
