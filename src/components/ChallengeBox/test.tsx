@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react'
 
-import CountDown from '.'
+import ChallengeBox from '.'
 
-describe('<CountDown />', () => {
+describe('<ChallengeBox />', () => {
   it('should render the heading', () => {
-    const { container } = render(<CountDown />)
+    const { container } = render(<ChallengeBox />)
 
     expect(
-      screen.getByRole('heading', { name: /CountDown/i }),
+      screen.getByRole('heading', { name: /ChallengeBox/i }),
     ).toBeInTheDocument()
 
     expect(container.firstChild).toMatchSnapshot()

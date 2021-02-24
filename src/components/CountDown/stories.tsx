@@ -3,7 +3,7 @@ import CountDown from '.'
 
 export default {
   title: 'CountDown',
-  component: CountDown
+  component: CountDown,
 } as Meta
 
 export const Default: Story = () => <CountDown />

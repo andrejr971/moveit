@@ -1,11 +1,12 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import AppProvider from 'hooks'
 
 import GlobalStyles from 'styles/global'
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <AppProvider>
       <Head>
         <title>MoveIt</title>
         <link rel="shortcut icon" href="/assets/img/favicon.png" />
@@ -23,7 +24,7 @@ function App({ Component, pageProps }: AppProps) {
       </Head>
       <GlobalStyles />
       <Component {...pageProps} />
-    </>
+    </AppProvider>
   )
 }
 
