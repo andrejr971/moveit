@@ -1,8 +1,21 @@
 import { useChallenge } from 'hooks/challenge'
+import { useCountDown } from 'hooks/countDown'
+import { useCallback } from 'react'
 import { Button, Container, Content } from './styles'
 
 const ChallengeBox = () => {
-  const { activeChallenge, resetChallenge } = useChallenge()
+  const { activeChallenge, resetChallenge, completeChallenge } = useChallenge()
+  const { ResetCountDown } = useCountDown()
+
+  const handleChallengeSucceeded = useCallback(() => {
+    completeChallenge()
+    ResetCountDown()
+  }, [ResetCountDown, completeChallenge])
+
+  const handleChallengeFailed = useCallback(() => {
+    resetChallenge()
+    ResetCountDown()
+  }, [ResetCountDown, resetChallenge])
 
   return (
     <Container>
@@ -20,10 +33,18 @@ const ChallengeBox = () => {
             </main>
 
             <footer>
-              <Button className="fail" type="button" onClick={resetChallenge}>
+              <Button
+                className="fail"
+                type="button"
+                onClick={handleChallengeFailed}
+              >
                 Falhei
               </Button>
-              <Button className="success" type="button">
+              <Button
+                className="success"
+                type="button"
+                onClick={handleChallengeSucceeded}
+              >
                 Completei
               </Button>
             </footer>

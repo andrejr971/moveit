@@ -20,12 +20,15 @@ export const Container = styled.header`
       height: 4px;
       border-radius: 4px;
       background: var(--green);
+
+      transition: width 0.3s;
     }
   }
 
   span.current-experience {
     position: absolute;
     top: 12px;
+    transition: left 0.3s;
 
     transform: translateX(-50%);
   }

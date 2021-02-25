@@ -3,6 +3,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from 'react'
 
@@ -23,6 +24,7 @@ interface IChallengeContextData {
   experienceToNextLevel: number
   activeChallenge: IChallenge | null
   resetChallenge: () => void
+  completeChallenge: () => void
 }
 
 interface ChallengeProps {
@@ -43,6 +45,10 @@ const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2)
 
+  useEffect(() => {
+    Notification.requestPermission()
+  }, [])
+
   const levelUp = useCallback(() => {
     setLevel(level + 1)
   }, [level])
@@ -51,12 +57,44 @@ const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
     const randomChanllengeIndex = Math.floor(Math.random() * challenges.length)
     const challenge = challenges[randomChanllengeIndex]
 
+    if (Notification.permission === 'granted') {
+      new Notification('Novo Desafio \u{1F389}', {
+        body: `Valendo ${challenge.amount}xp`,
+        icon: '/assets/img/favicon.png',
+      })
+
+      new Audio('/assets/song/notification.mp3').play()
+    }
+
     setActiveChallenge(challenge as IChallenge)
   }, [])
 
   const resetChallenge = useCallback(() => {
     setActiveChallenge(null)
   }, [])
+
+  const completeChallenge = useCallback(() => {
+    if (!activeChallenge) return
+
+    const { amount } = activeChallenge
+
+    let finalExperience = currentExperience + amount
+
+    if (finalExperience >= experienceToNextLevel) {
+      finalExperience = finalExperience - experienceToNextLevel
+      levelUp()
+    }
+
+    setActiveChallenge(null)
+    setCurrentExperience(finalExperience)
+    setChallengesCompleted(challengesCompleted + 1)
+  }, [
+    activeChallenge,
+    currentExperience,
+    experienceToNextLevel,
+    levelUp,
+    challengesCompleted,
+  ])
 
   return (
     <ChallengeContext.Provider
@@ -69,6 +107,7 @@ const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
         activeChallenge,
         resetChallenge,
         experienceToNextLevel,
+        completeChallenge,
       }}
     >
       {children}
@@ -76,7 +115,7 @@ const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
   )
 }
 
-function useChallenge() {
+function useChallenge(): IChallengeContextData {
   const context = useContext<IChallengeContextData>(ChallengeContext)
 
   if (!context) {

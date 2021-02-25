@@ -5,7 +5,7 @@ import GlobalStyles from '../src/styles/global'
 addDecorator(withNextRouter())
 
 export const decorators = [
-  (Story) => (
+  Story => (
     <>
       <GlobalStyles />
       <Story />
