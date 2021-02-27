@@ -2,6 +2,7 @@ import ChallengeBox from 'components/ChallengeBox'
 import CompletedChallenges from 'components/CompletedChallenges'
 import CountDown from 'components/CountDown'
 import ExperienceBar from 'components/ExperienceBar'
+
 import Profile from 'components/Profile'
 
 import { Challenge, Container, Section, Time } from './styles'

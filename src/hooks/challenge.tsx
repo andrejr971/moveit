@@ -6,6 +6,8 @@ import {
   useEffect,
   useState,
 } from 'react'
+import Cookies from 'js-cookie'
+import LevelUp from 'components/LevelUp'
 
 import challenges from '../../challenges.json'
 
@@ -29,19 +31,27 @@ interface IChallengeContextData {
 
 interface ChallengeProps {
   children: ReactNode
+  level: number
+  currentExperience: number
+  challengesCompleted: number
 }
 
 const ChallengeContext = createContext<IChallengeContextData>(
   {} as IChallengeContextData,
 )
 
-const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
-  const [level, setLevel] = useState(1)
-  const [currentExperience, setCurrentExperience] = useState(0)
-  const [challengesCompleted, setChallengesCompleted] = useState(0)
+const ChallengeProvider: React.FC<ChallengeProps> = ({ children, ...rest }) => {
+  const [level, setLevel] = useState(rest.level ?? 1)
+  const [currentExperience, setCurrentExperience] = useState(
+    rest.currentExperience ?? 0,
+  )
+  const [challengesCompleted, setChallengesCompleted] = useState(
+    rest.challengesCompleted ?? 0,
+  )
   const [activeChallenge, setActiveChallenge] = useState<IChallenge | null>(
     null,
   )
+  const [isLevelUpModal, setIsLevelUpModal] = useState(false)
 
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2)
 
@@ -49,8 +59,15 @@ const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
     Notification.requestPermission()
   }, [])
 
+  useEffect(() => {
+    Cookies.set('level', String(level))
+    Cookies.set('currentExperience', String(currentExperience))
+    Cookies.set('challengesCompleted', String(challengesCompleted))
+  }, [level, currentExperience, challengesCompleted])
+
   const levelUp = useCallback(() => {
     setLevel(level + 1)
+    setIsLevelUpModal(true)
   }, [level])
 
   const startNewChallenge = useCallback(() => {
@@ -71,6 +88,10 @@ const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
 
   const resetChallenge = useCallback(() => {
     setActiveChallenge(null)
+  }, [])
+
+  const setCloseLevelUpModal = useCallback(() => {
+    setIsLevelUpModal(false)
   }, [])
 
   const completeChallenge = useCallback(() => {
@@ -111,6 +132,11 @@ const ChallengeProvider: React.FC<ChallengeProps> = ({ children }) => {
       }}
     >
       {children}
+
+      <LevelUp
+        isLevelUpModal={isLevelUpModal}
+        setCloseLevelUpModal={setCloseLevelUpModal}
+      />
     </ChallengeContext.Provider>
   )
 }
